@@ -29,7 +29,7 @@ const con = mysql2.createConnection({
 
 con.connect(function(err) {
     if(err) throw err;
-    console.log('Connect successfully!')
+    console.log('Connect successfully 1!')
 })
 
 app.listen(port, () => { 
