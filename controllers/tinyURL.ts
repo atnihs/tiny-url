@@ -53,7 +53,7 @@ function shortUrl(url: any) {
   return hashRandomURL();
 }
 
-export const generateLongURL = (req: Request, res: Response) => {
+export const generateShortURL = (req: Request, res: Response) => {
   const { url } = req.params;
 
   const original_url = getURL(url);
