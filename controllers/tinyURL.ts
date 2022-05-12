@@ -10,9 +10,9 @@ export const registerEmail = (req: Request, res: Response) => {
   connectDB.execute(
     "SELECT EXISTS ( SELECT * FROM `users` WHERE email = ?) as result",
     [email],
+    //   TODO: handle error
     function (err, results, fields) {
       const [{ result }] = results as { result: number }[];
-      //   console.log(result);
       if (!result) {
         connectDB.query(
           "INSERT INTO `users` (email, api_key) VALUES (?, ?)",
