@@ -10,4 +10,4 @@ router.route("/").get(registerEmail);
 router.route("/:url").post(generateLongURL);
 router.route("/:id").get(handleShortenURL);
 
-module.exports = router;
+export default router;
