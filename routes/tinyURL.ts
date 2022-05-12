@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-const {registerEmail, generateLongURL} = require('../controllers/tinyURL')
+import { registerEmail, generateLongURL } from '../controllers/tinyURL';
 
 router.route('/').get(registerEmail);
 router.route('/:url').post(generateLongURL);
