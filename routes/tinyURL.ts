@@ -1,8 +1,13 @@
-import express from 'express';
+import express from "express";
 const router = express.Router();
-import { registerEmail, generateLongURL } from '../controllers/tinyURL';
+import {
+  registerEmail,
+  generateLongURL,
+  handleShortenURL,
+} from "../controllers/tinyURL";
 
-router.route('/').get(registerEmail);
-router.route('/:url').post(generateLongURL);
+router.route("/").get(registerEmail);
+router.route("/:url").post(generateLongURL);
+router.route("/:id").get(handleShortenURL);
 
 module.exports = router;

@@ -11,10 +11,9 @@ export const registerEmail = (req: Request, res: Response) => {
     "SELECT EXISTS ( SELECT * FROM `users` WHERE email = ?) as result",
     [email],
     function (err, results, fields) {
-      // Check results must be valid format
-
       const [{ result }] = results as { result: number }[];
-      if (!results) {
+      //   console.log(result);
+      if (!result) {
         connectDB.query(
           "INSERT INTO `users` (email, api_key) VALUES (?, ?)",
           [email, api_key],
@@ -54,36 +53,51 @@ function shortUrl(url: any) {
   return hashRandomURL();
 }
 
-export const generateLongURL = async (req: any, res: any) => {
+export const generateLongURL = (req: Request, res: Response) => {
   const { url } = req.params;
 
   const original_url = getURL(url);
   let randomURL = shortUrl(url);
 
   // check API_KEY
-  //   const { api_key } = req.params;
-  //   connectDB.execute(
-  //     "SELECT EXISTS ( SELECT * FROM `users` WHERE api_key = ?) as result",
-  //     [api_key],
-  //     function (err, results, fields) {
-  //       // do something
-  //     }
-  //   );
-  // check URL if exist
+  const { api_key } = req.body;
+  connectDB.execute(
+    "SELECT EXISTS ( SELECT * FROM `users` WHERE api_key = ?) as result",
+    [api_key],
+    function (err, results, fields) {
+      const [{ result }] = results as { result: number }[];
+      console.log(result);
+      if (result) {
+        // add newURL
+        connectDB.query(
+          "INSERT INTO `url` (original_url, tiny_url) VALUES (?, ?)",
+          [url, randomURL],
+          function (err: any, result: any) {
+            if (err) throw err;
+            res.status(200).json({
+              message: `Generate shorten URL ${randomURL}`,
+            });
+          }
+        );
+      } else {
+        res.status(404).json({
+          message: "Unauthorized access to generateLongURL!",
+        });
+      }
+    }
+  );
+};
 
-  // add newURL
-  connectDB.query(
-    "INSERT INTO `url` (original_url, tiny_url) VALUES (?, ?)",
-    [url, randomURL],
-    function (err: any, result: any) {
-      if (err) throw err;
-      res.status(200).json({
-        message: "success",
-        data: {
-          original_url,
-          randomURL,
-        },
-      });
+export const handleShortenURL = (req: Request, res: Response) => {
+  const { id } = req.params;
+  //   console.log(id);
+  connectDB.execute(
+    "SELECT original_url FROM `url` WHERE tiny_url = ?",
+    [id],
+    function (err, results, fields) {
+      const [{ original_url }] = results as { original_url: number }[];
+      //   console.log(results);
+      res.redirect(200, `${original_url}`);
     }
   );
 };
