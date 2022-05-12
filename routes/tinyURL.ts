@@ -6,8 +6,8 @@ import {
   handleShortenURL,
 } from "../controllers/tinyURL";
 
-router.route("/").post(registerEmail);
-router.route("/:url").post(generateShortURL);
 router.route("/:id").get(handleShortenURL);
+router.route("/:url").post(generateShortURL);
+router.route("/").post(registerEmail);
 
 export default router;

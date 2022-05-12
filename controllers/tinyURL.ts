@@ -12,6 +12,7 @@ export const registerEmail = (req: Request, res: Response) => {
     [email],
     //   TODO: handle error
     function (err, results, fields) {
+      if (err) throw err;
       const [{ result }] = results as { result: number }[];
       if (!result) {
         connectDB.query(
@@ -57,6 +58,7 @@ export const generateShortURL = (req: Request, res: Response) => {
   const { url } = req.params;
 
   const original_url = getURL(url);
+  
   let randomURL = shortUrl(url);
 
   // check API_KEY
@@ -65,13 +67,14 @@ export const generateShortURL = (req: Request, res: Response) => {
     "SELECT EXISTS ( SELECT * FROM `users` WHERE api_key = ?) as result",
     [api_key],
     function (err, results, fields) {
+      if (err) throw err;
       const [{ result }] = results as { result: number }[];
-      console.log(result);
+
       if (result) {
         // add newURL
         connectDB.query(
           "INSERT INTO `url` (original_url, tiny_url) VALUES (?, ?)",
-          [url, randomURL],
+          [original_url, randomURL],
           function (err: any, result: any) {
             if (err) throw err;
             res.status(200).json({
@@ -90,14 +93,17 @@ export const generateShortURL = (req: Request, res: Response) => {
 
 export const handleShortenURL = (req: Request, res: Response) => {
   const { id } = req.params;
-  //   console.log(id);
+
   connectDB.execute(
     "SELECT original_url FROM `url` WHERE tiny_url = ?",
     [id],
     function (err, results, fields) {
-      const [{ original_url }] = results as { original_url: number }[];
-      //   console.log(results);
-      res.redirect(200, `${original_url}`);
+      if (err) throw err;
+      const [{ original_url }] = results as { original_url: any }[];
+      
+      res.status(200).json({
+        data: original_url,
+      });
     }
   );
 };
