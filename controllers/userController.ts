@@ -28,55 +28,18 @@ export const registerEmail = async (req: Request, res: Response) => {
   }
 };
 
-export const generateShortURL = (req: Request, res: Response) => {
-  const { name } = req.query;
+// export const handleShortenURL = (req: Request, res: Response) => {
+//   const { id } = req.params;
 
-  // const original_url = encodeURIComponent(`${name}`);
-
-  const randomURL = shortUrl(name);
-
-  // check API_KEY
-  const { api_key } = req.body;
-  connectDB.execute(
-    "SELECT EXISTS ( SELECT * FROM `users` WHERE api_key = ?) as result",
-    [api_key],
-    function (err, results, fields) {
-      if (err) throw err;
-      const [{ result }] = results as { result: number }[];
-
-      if (result) {
-        // add newURL
-        connectDB.query(
-          "INSERT INTO `url` (original_url, tiny_url) VALUES (?, ?)",
-          [name, randomURL],
-          function (err: any, result: any) {
-            if (err) throw err;
-            res.status(200).json({
-              message: `Generate shorten URL ${randomURL}`,
-            });
-          }
-        );
-      } else {
-        res.status(404).json({
-          message: "Unauthorized access to generate!",
-        });
-      }
-    }
-  );
-};
-
-export const handleShortenURL = (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  connectDB.execute(
-    "SELECT original_url FROM `url` WHERE tiny_url = ?",
-    [id],
-    function (err, results, fields) {
-      if (err) throw err;
-      const [{ original_url }] = results as { original_url: any }[];
-      // const data = decodeURIComponent(original_url);
-      cache.set(id, original_url);
-      res.redirect(original_url);
-    }
-  );
-};
+//   connectDB.execute(
+//     "SELECT original_url FROM `url` WHERE tiny_url = ?",
+//     [id],
+//     function (err, results, fields) {
+//       if (err) throw err;
+//       const [{ original_url }] = results as { original_url: any }[];
+//       // const data = decodeURIComponent(original_url);
+//       cache.set(id, original_url);
+//       res.redirect(original_url);
+//     }
+//   );
+// };
