@@ -55,11 +55,11 @@ function shortUrl(url: any) {
 }
 
 export const generateShortURL = (req: Request, res: Response) => {
-  const { url } = req.params;
+  const { name } = req.query;
 
-  const original_url = getURL(url);
-  
-  let randomURL = shortUrl(url);
+  const original_url = encodeURIComponent(`${name}`);
+
+  const randomURL = shortUrl(name);
 
   // check API_KEY
   const { api_key } = req.body;
@@ -84,7 +84,7 @@ export const generateShortURL = (req: Request, res: Response) => {
         );
       } else {
         res.status(404).json({
-          message: "Unauthorized access to generateLongURL!",
+          message: "Unauthorized access to generate!",
         });
       }
     }
@@ -100,10 +100,11 @@ export const handleShortenURL = (req: Request, res: Response) => {
     function (err, results, fields) {
       if (err) throw err;
       const [{ original_url }] = results as { original_url: any }[];
-      
-      res.status(200).json({
-        data: original_url,
-      });
+      const data = decodeURIComponent(original_url);
+      // res.status(200).json({
+      //   data,
+      // });
+      res.redirect(data);
     }
   );
 };

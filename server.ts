@@ -9,6 +9,12 @@ app.use(express.json());
 const port = 3000;
 
 app.use("/api/user", tinyURL);
+// app.get("/encode", checkURL, encodeURL);
+// app.get("/decode", decodeURL);
+
+// app.get("/check", (req, res) => {
+//   console.log(req.query);
+// });
 
 const start = () => {
   connectDB.connect(() => {
