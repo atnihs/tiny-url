@@ -8,8 +8,10 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-const cache = new nodeCache();
+
 const port = 3000;
+
+const cache = new nodeCache();
 
 app.use("/api/user", tinyURL);
 
@@ -25,10 +27,6 @@ const verifyCache = (req: Request, res: Response, next: any) => {
     throw new Error(err);
   }
 };
-
-app.get("/", (req, res) => {
-  return res.json({ message: "Hello world 🇵🇹" });
-});
 
 app.get("/cache/:id", verifyCache, async (req, res) => {
   try {
