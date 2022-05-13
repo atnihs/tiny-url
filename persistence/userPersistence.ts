@@ -1,6 +1,6 @@
 import { connectDB } from "../database/connect";
 
-export const checkEmailExists = (email: string): Promise<boolean> => {
+const checkEmailExists = (email: string): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     connectDB.query(
       "SELECT EXISTS ( SELECT * FROM `users` WHERE email = ?) as result",
@@ -12,4 +12,21 @@ export const checkEmailExists = (email: string): Promise<boolean> => {
       }
     );
   });
+};
+
+const addEmail = (email: string, api_key: string) => {
+  return new Promise((resolve, reject) => {
+    connectDB.query(
+      "INSERT INTO `users` (email, api_key) VALUES (?, ?)",
+      [email, api_key],
+      function (err, result) {
+        if (err) return reject(err);
+      }
+    );
+  });
+};
+
+export default {
+  checkEmailExists,
+  addEmail,
 };
