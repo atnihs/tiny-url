@@ -7,9 +7,10 @@ const queryGetOriginalURL = (tiny_url: string): Promise<any> => {
       [tiny_url],
       function (err, results, fields) {
         if (err) return reject(err);
-        const [{ original_url }] = results as unknown as {
+        const [{ original_url }] = results as {
           original_url: any;
         }[];
+
         return resolve(original_url);
       }
     );

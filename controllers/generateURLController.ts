@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { shortUrl } from "../utils/handleURL";
+import utils from "../utils/handleURL";
 import generateURLService from "../services/generateURLService";
 
 export const generateShortURL = async (req: Request, res: Response) => {
   const { name } = req.query as any;
-  const randomURL = shortUrl(name);
+  
+  const randomURL = utils.shortUrl(name);
 
   const { api_key } = req.body;
 

@@ -10,7 +10,13 @@ function hashRandomURL() {
   return randomString;
 }
 
-export function shortUrl(url: any) {
+function shortUrl(url: any) {
   let generateURL = getURL(url);
   return hashRandomURL();
 }
+
+export default {
+  getURL,
+  hashRandomURL,
+  shortUrl,
+};
