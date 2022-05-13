@@ -10,10 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mysql2": "^2.3.3",
     "nanoid": "^3.3.4",
+    "node-cache": "^5.1.2",
     "node-url-shortener": "^2.0.1",
     "nodemon": "^2.0.16",
     "ts-node": "^10.7.0"

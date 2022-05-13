@@ -1,20 +1,47 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import { connectDB } from "./database/connect";
 import tinyURL from "./routes/tinyURL";
+import axios from "axios";
+import nodeCache from "node-cache";
+
 require("dotenv").config();
 
 const app = express();
 app.use(express.json());
-
+const cache = new nodeCache();
 const port = 3000;
 
 app.use("/api/user", tinyURL);
-// app.get("/encode", checkURL, encodeURL);
-// app.get("/decode", decodeURL);
 
-// app.get("/check", (req, res) => {
-//   console.log(req.query);
-// });
+// test cache
+const verifyCache = (req: Request, res: Response, next: any) => {
+  try {
+    const { id } = req.params;
+    if (cache.has(id)) {
+      return res.status(200).json(cache.get(id));
+    }
+    return next();
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+app.get("/", (req, res) => {
+  return res.json({ message: "Hello world 🇵🇹" });
+});
+
+app.get("/cache/:id", verifyCache, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { data } = await axios.get(
+      `https://jsonplaceholder.typicode.com/todos/${id}`
+    );
+    cache.set(id, data);
+    return res.status(200).json(data);
+  } catch (err: any) {
+    console.log(err);
+  }
+});
 
 const start = () => {
   connectDB.connect(() => {
