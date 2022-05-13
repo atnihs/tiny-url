@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { connectDB } from "./database/connect";
+// import { knexConnect } from "./database/connectKnex";
 import tinyURL from "./routes/tinyURL";
 import axios from "axios";
 import nodeCache from "node-cache";
@@ -12,6 +13,13 @@ app.use(express.json());
 const port = 3000;
 
 const cache = new nodeCache();
+
+// app.get("/all", async (req, res) => {
+//   const result = await knexConnect.select("email", "api_key").from("users");
+//   res.json({
+//     data: result,
+//   });
+// });
 
 app.use("/api/user", tinyURL);
 

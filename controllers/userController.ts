@@ -1,11 +1,6 @@
-import { connectDB } from "../database/connect";
 import { nanoid } from "nanoid";
 import { Request, Response } from "express";
-import nodeCache from "node-cache";
-import { shortUrl } from "../utils/handleURL";
 import userService from "../services/userService";
-
-const cache = new nodeCache();
 
 export const registerEmail = async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -27,19 +22,3 @@ export const registerEmail = async (req: Request, res: Response) => {
     });
   }
 };
-
-// export const handleShortenURL = (req: Request, res: Response) => {
-//   const { id } = req.params;
-
-//   connectDB.execute(
-//     "SELECT original_url FROM `url` WHERE tiny_url = ?",
-//     [id],
-//     function (err, results, fields) {
-//       if (err) throw err;
-//       const [{ original_url }] = results as { original_url: any }[];
-//       // const data = decodeURIComponent(original_url);
-//       cache.set(id, original_url);
-//       res.redirect(original_url);
-//     }
-//   );
-// };
