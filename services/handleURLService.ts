@@ -1,9 +1,7 @@
 import handleURLPersistence from "../persistence/handleURLPersistence";
 
-const queryGetOriginalURL = (tiny_url: string) => {
-  const a = handleURLPersistence.queryGetOriginalURL(tiny_url);
-  console.log(a);
-  return a;
+const queryGetOriginalURL = (tiny_url: string): Promise<any> => {
+  return handleURLPersistence.queryGetOriginalURL(tiny_url);
 };
 
 export default {
