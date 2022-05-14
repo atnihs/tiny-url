@@ -6,10 +6,10 @@ import nodeCache from "node-cache";
 const cache = new nodeCache();
 
 export const handleShortenURL = async (req: Request, res: Response) => {
-  const { tiny_url } = req.params;
+  const { id } = req.params;
 
-  const [{ original_url }] = await urlService.queryGetOriginalURL(tiny_url);
-  cache.set(tiny_url, original_url);
+  const [{ original_url }] = await urlService.queryGetOriginalURL(id);
+  cache.set(id, original_url);
   const getProtocolURL = utils.getURL(original_url);
   res.redirect(`${getProtocolURL}`);
 };
