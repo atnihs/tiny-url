@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-export const knexConnect = require("knex")({
+export const connectKnex = require("knex")({
   client: "mysql2",
   connection: {
     host: process.env.DB_HOST,

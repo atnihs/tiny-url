@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { connectDB } from "./database/connect";
-// import { knexConnect } from "./database/connectKnex";
+import { connectKnex } from "./database/connectKnex";
 import tinyURL from "./routes/tinyURL";
 import axios from "axios";
 import nodeCache from "node-cache";
@@ -14,12 +14,33 @@ const port = 3000;
 
 const cache = new nodeCache();
 
-// app.get("/all", async (req, res) => {
-//   const result = await knexConnect.select("email", "api_key").from("users");
-//   res.json({
-//     data: result,
-//   });
-// });
+app.get("/all", async (req: Request, res: Response) => {
+  const result = await connectKnex.select("email", "api_key").from("users");
+  res.json({
+    data: result,
+  });
+});
+
+app.get("/check", async (req: Request, res: Response) => {
+  const { email } = req.body;
+  const api_key = "1";
+  await connectKnex("users")
+    .select()
+    .where("email", email)
+    .then(async function (rows: string | any[]) {
+      if (rows.length !== 0) {
+        res.json({ message: "User exist" });
+      } else {
+        await connectKnex("users").insert({ email, api_key });
+        res.json({
+          data: { email, api_key },
+        });
+      }
+    })
+    .catch(function (err: any) {
+      console.log("Error: " + err.message);
+    });
+});
 
 app.use("/api/user", tinyURL);
 
