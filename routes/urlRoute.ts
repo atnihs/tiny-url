@@ -1,6 +1,6 @@
 import express from "express";
-import { generateShortURL } from "../controllers/generateURLController";
-import { handleShortenURL } from "../controllers/handleURLController";
+import { generateShortURL } from "../controllers/urlController";
+import { handleShortenURL } from "../controllers/urlController";
 import { verifyCache } from "../middleware/verify";
 
 const router = express.Router();
