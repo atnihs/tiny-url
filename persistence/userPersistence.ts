@@ -1,12 +1,5 @@
 import { connectKnex } from "../database/connectKnex";
 
-const queryAddEmail = async (email: string, api_key: string) => {
-  await connectKnex("users").insert({
-    email: email,
-    api_key: api_key,
-  });
-};
-
 const checkEmailExists = async (email: string): Promise<boolean> => {
   return await connectKnex("users")
     .select("*")
@@ -18,6 +11,13 @@ const checkEmailExists = async (email: string): Promise<boolean> => {
         return false;
       }
     });
+};
+
+const queryAddEmail = async (email: string, api_key: string) => {
+  await connectKnex("users").insert({
+    email,
+    api_key,
+  });
 };
 
 export default {

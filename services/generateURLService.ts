@@ -1,6 +1,6 @@
 import generateURLPersistence from "../persistence/generateURLPersistence";
 
-const checkAPIKeyExists = (api_key: string) => {
+const checkAPIKeyExists = (api_key: string): Promise<boolean> => {
   return generateURLPersistence.checkAPIKeyExists(api_key);
 };
 

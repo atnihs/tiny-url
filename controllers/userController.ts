@@ -7,14 +7,14 @@ export const registerEmail = async (req: Request, res: Response) => {
   const api_key = nanoid(20);
 
   const isEmailExisted = await userService.checkEmailExists(email);
-  if (!isEmailExisted) {
-    res.status(200).json({
-      message: "Email exists",
-    });
-  } else {
+  if (isEmailExisted) {
     userService.queryAddEmail(email, api_key);
     res.status(200).json({
       data: { email, api_key },
+    });
+  } else {
+    res.status(200).json({
+      message: "Email exists",
     });
   }
 };

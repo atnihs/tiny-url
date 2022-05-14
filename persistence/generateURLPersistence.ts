@@ -1,29 +1,20 @@
-import { connectDB } from "../database/connect";
+import { connectKnex } from "../database/connectKnex";
 
-const checkAPIKeyExists = (api_key: string): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    connectDB.query(
-      "SELECT EXISTS ( SELECT * FROM `users` WHERE api_key = ?) as result",
-      [api_key],
-      function (err, results, fields) {
-        if (err) return reject(err);
-        const [{ result }] = results as { result: number }[];
-        return resolve(Boolean(result));
+const checkAPIKeyExists = async (api_key: string): Promise<boolean> => {
+  return await connectKnex("users")
+    .select("*")
+    .where("api_key", api_key)
+    .then(async function (rows: string) {
+      if (rows.length === 0) {
+        return false;
+      } else {
+        return true;
       }
-    );
-  });
+    });
 };
 
-const addURL = (original_url: string, tiny_url: string) => {
-  return new Promise((resolve, reject) => {
-    connectDB.query(
-      "INSERT INTO `url` (original_url, tiny_url) VALUES (? ,?)",
-      [original_url, tiny_url],
-      function (err) {
-        if (err) return reject(err);
-      }
-    );
-  });
+const addURL = async (original_url: string, tiny_url: string) => {
+  await connectKnex("url").insert({ original_url, tiny_url });
 };
 
 export default {
