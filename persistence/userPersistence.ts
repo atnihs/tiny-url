@@ -4,7 +4,7 @@ const checkEmailExists = async (email: string): Promise<boolean> => {
   return await connectKnex("users")
     .select("*")
     .where("email", email)
-    .then(async function (rows: string) {
+    .then(function (rows: string) {
       if (rows.length === 0) {
         return true;
       } else {
